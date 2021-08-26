@@ -37,7 +37,7 @@ namespace CsvHelperUnitTest
             {
                 new Foo { Id = 1, Name = "one" },
                 new Foo { Id = 2, Name = "=AND(1,2)" }, 
-                new Foo { Id = 3, Name = "=2+5+cmd|' /C calc'!A0" },
+                new Foo { Id = 3, Name = "=2+5+cmd|' /C calc'!A0" },//https://www.cnblogs.com/micr067/p/14158456.html
             };
             
             using (var writer = new StreamWriter($@"C:\workspace\Company\UK\Troubleshooting\TestSanitizeForInjection_True-{DateTime.Now:yyyyMMdd-HHmmss}.csv"))
@@ -57,7 +57,7 @@ namespace CsvHelperUnitTest
             {
                 new Foo { Id = 1, Name = "one" },
                 new Foo { Id = 2, Name = "=AND(1,2)" },
-                new Foo { Id = 3, Name = "=2+5+cmd|' /C calc'!A0" },
+                new Foo { Id = 3, Name = "=2+5+cmd|' /C calc'!A0" },//https://www.cnblogs.com/micr067/p/14158456.html
             };
 
             using (var writer = new StreamWriter($@"C:\workspace\Company\UK\Troubleshooting\TestSanitizeForInjection_False-{DateTime.Now:yyyyMMdd-HHmmss}.csv"))
