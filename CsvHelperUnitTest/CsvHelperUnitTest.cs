@@ -36,7 +36,8 @@ namespace CsvHelperUnitTest
             var records = new List<Foo>
             {
                 new Foo { Id = 1, Name = "one" },
-                new Foo { Id = 2, Name = "=AND(1,2)" },
+                new Foo { Id = 2, Name = "=AND(1,2)" }, 
+                new Foo { Id = 3, Name = "=2+5+cmd|' /C calc'!A0" },
             };
             
             using (var writer = new StreamWriter($@"C:\workspace\Company\UK\Troubleshooting\TestSanitizeForInjection_True-{DateTime.Now:yyyyMMdd-HHmmss}.csv"))
@@ -56,6 +57,7 @@ namespace CsvHelperUnitTest
             {
                 new Foo { Id = 1, Name = "one" },
                 new Foo { Id = 2, Name = "=AND(1,2)" },
+                new Foo { Id = 3, Name = "=2+5+cmd|' /C calc'!A0" },
             };
 
             using (var writer = new StreamWriter($@"C:\workspace\Company\UK\Troubleshooting\TestSanitizeForInjection_False-{DateTime.Now:yyyyMMdd-HHmmss}.csv"))
