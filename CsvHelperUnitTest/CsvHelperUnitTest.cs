@@ -36,6 +36,7 @@ namespace CsvHelperUnitTest
             var records = new List<Foo>
             {
                 new Foo { Id = 1, Name = "one" },
+                new Foo { Id = 2, Name = "=AND(1,2)" },
             };
             
             using (var writer = new StreamWriter($@"C:\workspace\Company\UK\Troubleshooting\test-{DateTime.Now:yyyyMMdd-HHmmss}.csv"))
