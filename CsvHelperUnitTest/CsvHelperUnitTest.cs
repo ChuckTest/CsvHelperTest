@@ -88,5 +88,12 @@ namespace CsvHelperUnitTest
                 csv.WriteRecords(records);
             }
         }
+
+        [Test]
+        public void Test20210830_001()
+        {
+            var bytes = Array.Empty<byte>();
+            Console.WriteLine($"bytes.Length = {bytes.Length}");
+        }
     }
 }
