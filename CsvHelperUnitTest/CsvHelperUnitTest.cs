@@ -138,5 +138,52 @@ namespace CsvHelperUnitTest
             }
         }
 
+        [Test]
+        public void Test20210830_003()
+        {
+            //https://github.com/JoshClose/CsvHelper/issues/1399
+            var dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+
+            var row = dt.NewRow();
+            row["Id"] = 1;
+            row["Name"] = "one";
+            dt.Rows.Add(row);
+
+            row = dt.NewRow();
+            row["Id"] = 2;
+            row["Name"] = "two";
+            dt.Rows.Add(row);
+
+            row = dt.NewRow();
+            row["Id"] = 3;
+            row["Name"] = "=AND(1,2)";
+            dt.Rows.Add(row);
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            config.SanitizeForInjection = true;
+
+            using (var writer = new StreamWriter($@"C:\workspace\Company\UK\Troubleshooting\TestSanitizeForInjection_True-{DateTime.Now:yyyyMMdd-HHmmss}.csv"))
+            using (var csv = new CsvWriter(writer, config))
+            {
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    csv.WriteField(dc.ColumnName);
+                }
+                csv.NextRecord();
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        csv.WriteField(dr[dc]);
+                    }
+                    csv.NextRecord();
+                }
+                
+                csv.Flush();
+            }
+        }
     }
 }
