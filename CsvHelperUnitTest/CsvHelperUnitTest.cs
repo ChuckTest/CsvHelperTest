@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using CsvHelper;
@@ -95,5 +96,47 @@ namespace CsvHelperUnitTest
             var bytes = Array.Empty<byte>();
             Console.WriteLine($"bytes.Length = {bytes.Length}");
         }
+
+
+        [Test]
+        public void Test20210830_002()
+        {
+            //https://github.com/JoshClose/CsvHelper/issues/1399
+            var dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+
+            var row = dt.NewRow();
+            row["Id"] = 1;
+            row["Name"] = "one";
+            dt.Rows.Add(row);
+
+            row = dt.NewRow();
+            row["Id"] = 2;
+            row["Name"] = "two";
+            dt.Rows.Add(row);
+
+            using (var writer = new StringWriter())
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    csv.WriteField(dc.ColumnName);
+                }
+                csv.NextRecord();
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        csv.WriteField(dr[dc]);
+                    }
+                    csv.NextRecord();
+                }
+
+                Console.WriteLine(writer.ToString());
+            }
+        }
+
     }
 }
