@@ -241,13 +241,15 @@ namespace CsvHelperUnitTest
                     Console.WriteLine($"flag1 = {flag1}, flag2 = {flag2}");
 
                     Console.WriteLine($"csvReader.HeaderRecord.Length = {csvReader.HeaderRecord.Length}");
+                    Console.WriteLine($"csvReader.ColumnCount = {csvReader.ColumnCount}");
+
                     var count = csvReader.HeaderRecord.Length;
                     for (int i = 0; i < count; i++)
                     {
                         var str = csvReader.GetField(0);
                         Console.WriteLine(str);
                     }
-
+                    Console.WriteLine("Start to read second line");
                     while (csvReader.Read())
                     {
                         for (int i = 0; i < count; i++)
