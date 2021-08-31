@@ -211,5 +211,37 @@ namespace CsvHelperUnitTest
                 writer.Flush();
             }
         }
+
+        [Test]
+        public void Test20210831_002()
+        {
+            var folder = @"C:\workspace\Company\Test\2021\0831";
+            var path = Path.Combine(folder, "test.csv");
+            var path2 = Path.Combine(folder, "test2.csv");
+
+            byte[] bytes;
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                bytes = new byte[fs.Length];
+                fs.Read(bytes, 0, bytes.Length);
+            }
+
+            MemoryStream stream = new MemoryStream(bytes);
+
+            CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
+            csvConfiguration.SanitizeForInjection = true;
+            csvConfiguration.HasHeaderRecord = false;
+
+            using (var reader = new StreamReader(stream))
+            {
+                using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    csvReader.ReadHeader();
+                    var columnCount = csvReader.ColumnCount;
+                    Console.WriteLine($"columnCount = {columnCount}");
+                }
+            }
+        }
+
     }
 }
