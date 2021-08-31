@@ -185,5 +185,26 @@ namespace CsvHelperUnitTest
                 csv.Flush();
             }
         }
+
+        [Test]
+        public void Test20210831_001()
+        {
+            //https://github.com/JoshClose/CsvHelper/issues/1570
+            var folder = @"C:\workspace\Company\UK\Troubleshooting\2021\0831";
+            var path = Path.Combine(folder, "test.csv");
+            var path2 = Path.Combine(folder, "test2.csv");
+            var array = File.ReadAllLines(path);
+
+            CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
+            csvConfiguration.SanitizeForInjection = true;
+
+            using (var writer = new StreamWriter(path2, append: false))
+            {
+                CsvWriter csvWriter = new CsvWriter(writer, csvConfiguration);
+                csvWriter.WriteRecords(array);
+                csvWriter.Flush();
+                writer.Flush();
+            }
+        }
     }
 }
