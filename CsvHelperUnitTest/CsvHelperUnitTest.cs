@@ -236,9 +236,26 @@ namespace CsvHelperUnitTest
             {
                 using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    csvReader.ReadHeader();
-                    var columnCount = csvReader.ColumnCount;
-                    Console.WriteLine($"columnCount = {columnCount}");
+                    bool flag1 = csvReader.Read();
+                    bool flag2 = csvReader.ReadHeader();
+                    Console.WriteLine($"flag1 = {flag1}, flag2 = {flag2}");
+
+                    Console.WriteLine($"csvReader.HeaderRecord.Length = {csvReader.HeaderRecord.Length}");
+                    var count = csvReader.HeaderRecord.Length;
+                    for (int i = 0; i < count; i++)
+                    {
+                        var str = csvReader.GetField(0);
+                        Console.WriteLine(str);
+                    }
+
+                    while (csvReader.Read())
+                    {
+                        for (int i = 0; i < count; i++)
+                        {
+                            var str = csvReader.GetField(0);
+                            Console.WriteLine(str);
+                        }
+                    }
                 }
             }
         }
