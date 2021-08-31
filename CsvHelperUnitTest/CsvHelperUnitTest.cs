@@ -231,6 +231,7 @@ namespace CsvHelperUnitTest
             CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
             csvConfiguration.SanitizeForInjection = true;
             csvConfiguration.HasHeaderRecord = false;
+            csvConfiguration.Mode = CsvMode.NoEscape;
 
             using (var reader = new StreamReader(stream))
             {
