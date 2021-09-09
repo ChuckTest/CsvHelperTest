@@ -263,5 +263,21 @@ namespace CsvHelperUnitTest
             }
         }
 
+        [Test]
+        public void Test20210909_001()
+        {
+            char tab = '\t';//(0x09)
+            char carriageReturn = '\r';//(0x0D)
+            PrintHex(tab);
+            PrintHex(carriageReturn);
+        }
+
+        private void PrintHex(char character)
+        {
+            //https://owasp.org/www-community/attacks/CSV_Injection
+            byte b = Convert.ToByte(character);
+            var hex = b.ToString("X2");
+            Console.WriteLine(hex);
+        }
     }
 }
