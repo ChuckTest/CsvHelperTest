@@ -288,7 +288,8 @@ namespace CsvHelperUnitTest
             {
                 SanitizeForInjection = true,
                 InjectionEscapeCharacter = '\'',
-                InjectionCharacters = new[] { '=', '@', '+', '-', '\t', '\r' }
+                InjectionCharacters = new[] { '=', '@', '+', '-', '\t', '\r' },
+                BadDataFound = null
             };
 
             var folder = @"C:\workspace\Company\Test\2021\0831";
