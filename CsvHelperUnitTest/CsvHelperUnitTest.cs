@@ -279,5 +279,32 @@ namespace CsvHelperUnitTest
             var hex = b.ToString("X2");
             Console.WriteLine(hex);
         }
+
+        [Test]
+        public void Test20210910_001()
+        {
+            //https://joshclose.github.io/CsvHelper/examples/csvdatareader/
+            CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                SanitizeForInjection = true,
+                InjectionEscapeCharacter = '\'',
+                InjectionCharacters = new[] { '=', '@', '+', '-', '\t', '\r' }
+            };
+
+            var folder = @"C:\workspace\Company\Test\2021\0831";
+            var path = Path.Combine(folder, "test.csv");
+            DataTable dataTable = new DataTable();
+            using (var reader = new StreamReader(path))
+            using (var csv = new CsvReader(reader, csvConfiguration))
+            {
+                // Do any configuration to `CsvReader` before creating CsvDataReader.
+                using (var dr = new CsvDataReader(csv))
+                {
+                    dataTable.Load(dr);
+                }
+            }
+            Console.WriteLine(dataTable.Rows.Count);
+        }
+
     }
 }
