@@ -288,10 +288,10 @@ namespace CsvHelperUnitTest
             {
                 SanitizeForInjection = true,
                 InjectionEscapeCharacter = '\'',
-                InjectionCharacters = new[] { '=', '@', '+', '-', '\t', '\r' },
-                BadDataFound = null
+                InjectionCharacters = new[] {'=', '@', '+', '-', '\t', '\r'},
+                BadDataFound = null,
+                ShouldQuote = (x) => true
             };
-
             var folder = @"C:\workspace\Company\Test\2021\0831";
             var path = Path.Combine(folder, "test.csv");
             DataTable dataTable = new DataTable();
@@ -304,8 +304,73 @@ namespace CsvHelperUnitTest
                     dataTable.Load(dr);
                 }
             }
+
             Console.WriteLine(dataTable.Rows.Count);
         }
 
+        [Test]
+        public void Test20210913_001()
+        {
+
+            CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                SanitizeForInjection = true,
+                InjectionEscapeCharacter = '\'',
+                InjectionCharacters = new[] { '=', '@', '+', '-', '\t', '\r' },
+                BadDataFound = null,
+                ShouldQuote = (x) => true
+            };
+            var folder = @"C:\workspace\Company\Test\2021\0831";
+            var path = Path.Combine(folder, "test.csv");
+            DataTable dataTable = new DataTable();
+            using (var reader = new StreamReader(path))
+            using (var csv = new CsvReader(reader, csvConfiguration))
+            {
+                // Do any configuration to `CsvReader` before creating CsvDataReader.
+                using (var dr = new CsvDataReader(csv))
+                {
+                    dataTable.Load(dr);
+                }
+            }
+
+            var bytes = DataTableToCsvBytes(dataTable, csvConfiguration);
+            var path2= Path.Combine(folder, "test20210914.csv");
+            File.WriteAllBytes(path2,bytes);
+        }
+
+        public static byte[] DataTableToCsvBytes(DataTable dt, CsvConfiguration csvConfiguration)
+        {
+            if (null == dt)
+                return Array.Empty<byte>();
+            using (var memory = new MemoryStream())
+            {
+                using (var writer = new StreamWriter(memory))
+                {
+                    using (var csv = new CsvWriter(writer, csvConfiguration))
+                    {
+                        foreach (DataColumn dc in dt.Columns)
+                        {
+                            csv.WriteField(dc.ColumnName);
+                        }
+
+                        csv.NextRecord();
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                csv.WriteField(dr[dc]);
+                            }
+
+                            csv.NextRecord();
+                        }
+
+                        writer.Flush();
+                    }
+                }
+
+                return memory.ToArray();
+            }
+        }
+        
     }
 }
